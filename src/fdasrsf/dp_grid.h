@@ -71,7 +71,7 @@ double dp_costs(
   int dim, 
   double *tv1, int *idxv1, int ntv1, 
   double *tv2, int *idxv2, int ntv2, 
-  double *E, int *P, double lam );
+  double *E, int *P, double lam , double win );
 
 /**
  * Computes the weight of the edge from (a,c) to (b,d) in the DP grid.
