@@ -7,7 +7,7 @@
 #' @param f2 sample function 2
 #' @param time sample points of functions
 #' @param lambda controls amount of warping (default = 0)
-#' @param w restricts DP grid search to the speficied number of time increments (default = no restriction)
+#' @param window restricts DP grid search to the speficied number of time increments (default = no restriction)
 #' @return Returns a list containing \item{Dy}{amplitude distance}
 #' \item{Dx}{phase distance}
 #' @keywords distances
@@ -22,11 +22,11 @@
 #' @examples
 #' data("simu_data")
 #' distances <- elastic.distance(simu_data$f[,1],simu_data$f[,2],simu_data$time)
-elastic.distance <- function(f1,f2,time,lambda = 0,w=FALSE){
-    if(w==FALSE){w = length(time)}
+elastic.distance <- function(f1,f2,time,lambda = 0,window=FALSE){
+    if(window==FALSE){window = length(time)}
     q1 <- f_to_srvf(f1,time)
     q2 <- f_to_srvf(f2,time)
-    gam <- optimum.reparam(q1,time,q2,time,lambda,w)
+    gam <- optimum.reparam(q1,time,q2,time,lambda,window)
     fw <- approx(time,f2,xout=(time[length(time)]-time[1])*gam + time[1])$y
     qw <- f_to_srvf(fw,time)
     Dy <- sqrt(trapz(time, (q1-qw)^2))
