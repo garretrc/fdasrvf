@@ -7,6 +7,7 @@
 #' @param Q2 srsf of function 2
 #' @param T2 sample points of function 2
 #' @param lambda controls amount of warping (default = 0)
+#' @param window restricts DP grid search to the speficied number of time increments (default = no restriction)
 #' @param method controls which optimization method (default="DP") options are
 #' Dynamic Programming ("DP"), Coordinate Descent ("DP2"), and Riemannian BFGS
 #' ("RBFGS")
@@ -26,8 +27,10 @@
 #' data("simu_data")
 #' q = f_to_srvf(simu_data$f,simu_data$time)
 #' gam = optimum.reparam(q[,1],simu_data$time,q[,2],simu_data$time)
-optimum.reparam <- function(Q1,T1,Q2,T2,lambda=0,method="DP",w=0.01,f1o=0.0,
+optimum.reparam <- function(Q1,T1,Q2,T2,lambda=0,window=FALSE,method="DP",w=0.01,f1o=0.0,
                             f2o=0.0){
+    if (window==FALSE)
+      window = max(length(T1),length(T2))
     n = length(T1)
     if (method=="DPo" && all(T1!=T2))
       method = "DP"
@@ -43,7 +46,7 @@ optimum.reparam <- function(Q1,T1,Q2,T2,lambda=0,method="DP",w=0.01,f1o=0.0,
         G = rep(0,n)
         T = rep(0,n)
         size = 0;
-        ret = .Call('DPQ2', PACKAGE = 'fdasrvf', Q1, T1, Q2, T2, 1, n, n, T1, T2, n, n, G, T, size, lambda);
+        ret = .Call('DPQ2', PACKAGE = 'fdasrvf', Q1, T1, Q2, T2, 1, n, n, T1, T2, n, n, G, T, size, lambda, window);
 
         G = ret$G[1:ret$size]
         Tf = ret$T[1:ret$size]
