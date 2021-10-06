@@ -65,7 +65,7 @@ double dp_costs(
   int dim,
   double *tv1, int *idxv1, int ntv1,
   double *tv2, int *idxv2, int ntv2,
-  double *E, int *P, double lam )
+  double *E, int *P, double lam, double win)
 {
   int sr, sc;  /* source row and column */
   int tr, tc;  /* target row and column */
@@ -87,7 +87,7 @@ double dp_costs(
         sr = tr - dp_nbhd[i][0];
         sc = tc - dp_nbhd[i][1];
 
-        if ( sr < 0 || sc < 0 ) continue;
+        if ( sr < 0 || sc < 0 || tr - sr > win || tc - sc > win ) continue;
 
         w = dp_edge_weight( Q1, T1, nsamps1, Q2, T2, nsamps2, dim,
           tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam );
