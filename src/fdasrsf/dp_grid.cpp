@@ -81,13 +81,15 @@ double dp_costs(
     for ( tc=1; tc<ntv1; ++tc )
     {
       E[ntv1*tr + tc] = 1e6;
-
+      
+      if( abs(tr - tc) > win ) continue;
+      
       for ( i=0; i<DP_NBHD_COUNT; ++i )
       {
         sr = tr - dp_nbhd[i][0];
         sc = tc - dp_nbhd[i][1];
 
-        if ( sr < 0 || sc < 0 || tr - sr > win || tc - sc > win ) continue;
+        if ( sr < 0 || sc < 0 ) continue;
 
         w = dp_edge_weight( Q1, T1, nsamps1, Q2, T2, nsamps2, dim,
           tv1[sc], tv1[tc], tv2[sr], tv2[tr], idxv1[sc], idxv2[sr], lam );
